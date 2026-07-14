@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cellen — Gest&#227;o Escolar Inteligente</title>
+  <meta name="description" content="Cellen: plataforma de gest&#227;o para creches, jardins de inf&#226;ncia e ber&#231;&#225;rios em Angola. Matr&#237;culas, pagamentos, comunica&#231;&#227;o com pais e muito mais.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #2563EB;
+      --primary-dark: #1D4ED8;
+      --primary-light: #DBEAFE;
+      --accent: #F59E0B;
+      --dark: #0F172A;
+      --gray-900: #1E293B;
+      --gray-700: #334155;
+      --gray-500: #64748B;
+      --gray-300: #CBD5E1;
+      --gray-100: #F1F5F9;
+      --white: #FFFFFF;
+      --radius: 12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--gray-700);
+      line-height: 1.6;
+      background: var(--white);
+    }
+
+    /* --- NAV --- */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--gray-100);
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
+    .nav-inner {
+      max-width: 1140px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; height: 64px;
+    }
+    .logo {
+      font-size: 22px; font-weight: 800; color: var(--primary);
+      text-decoration: none; letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--gray-700); font-size: 14px;
+      font-weight: 500; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--primary); }
+    .nav-cta {
+      background: var(--primary); color: var(--white) !important;
+      padding: 8px 20px; border-radius: 8px; font-weight: 600 !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--primary-dark); }
+    .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
+    .menu-toggle svg { width: 28px; height: 28px; color: var(--gray-700); }
+
+    /* --- HERO --- */
+    .hero {
+      padding: 140px 24px 80px;
+      text-align: center;
+      background: linear-gradient(180deg, var(--primary-light) 0%, var(--white) 100%);
+    }
+    .hero-badge {
+      display: inline-block; background: var(--white);
+      border: 1px solid var(--gray-300); border-radius: 20px;
+      padding: 6px 16px; font-size: 13px; font-weight: 600;
+      color: var(--primary); margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 56px); font-weight: 800;
+      color: var(--dark); line-height: 1.15; max-width: 720px;
+      margin: 0 auto 20px; letter-spacing: -1px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--primary), #7C3AED);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 18px; color: var(--gray-500); max-width: 540px;
+      margin: 0 auto 36px; line-height: 1.7;
+    }
+    .hero-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: 10px; font-size: 15px;
+      font-weight: 600; text-decoration: none; transition: all 0.2s;
+      border: none; cursor: pointer;
+    }
+    .btn-primary { background: var(--primary); color: var(--white); }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,99,235,0.3); }
+    .btn-outline { background: var(--white); color: var(--gray-700); border: 1.5px solid var(--gray-300); }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+    .hero-stats {
+      display: flex; justify-content: center; gap: 48px;
+      margin-top: 56px; padding-top: 40px;
+      border-top: 1px solid var(--gray-300);
+    }
+    .hero-stats .stat { text-align: center; }
+    .hero-stats .stat-num { font-size: 28px; font-weight: 800; color: var(--dark); }
+    .hero-stats .stat-label { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
+
+    /* --- SECTIONS --- */
+    section { padding: 80px 24px; }
+    .container { max-width: 1140px; margin: 0 auto; }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .section-header h2 {
+      font-size: clamp(26px, 3.5vw, 36px); font-weight: 800;
+      color: var(--dark); margin-bottom: 12px; letter-spacing: -0.5px;
+    }
+    .section-header p { font-size: 16px; color: var(--gray-500); max-width: 520px; margin: 0 auto; }
+
+    /* --- FEATURES --- */
+    #funcionalidades { background: var(--gray-100); }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .feature-card {
+      background: var(--white); border-radius: var(--radius);
+      padding: 32px; border: 1px solid transparent;
+      transition: all 0.25s;
+    }
+    .feature-card:hover {
+      border-color: var(--primary-light);
+      box-shadow: 0 8px 30px rgba(37,99,235,0.08);
+      transform: translateY(-3px);
+    }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 16px;
+    }
+    .fi-blue { background: var(--primary-light); }
+    .fi-amber { background: #FEF3C7; }
+    .fi-green { background: #D1FAE5; }
+    .fi-purple { background: #EDE9FE; }
+    .fi-pink { background: #FCE7F3; }
+    .fi-teal { background: #CCFBF1; }
+    .feature-card h3 { font-size: 17px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+    .feature-card p { font-size: 14px; color: var(--gray-500); line-height: 1.6; }
+
+    /* --- HOW IT WORKS --- */
+    .steps {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 32px; counter-reset: step;
+    }
+    .step { text-align: center; position: relative; }
+    .step::before {
+      counter-increment: step; content: counter(step);
+      display: flex; align-items: center; justify-content: center;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--primary); color: var(--white);
+      font-size: 20px; font-weight: 700; margin: 0 auto 16px;
+    }
+    .step h3 { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+    .step p { font-size: 14px; color: var(--gray-500); }
+
+    /* --- BENEFITS --- */
+    #beneficios { background: var(--gray-100); }
+    .benefits-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+    }
+    .benefits-list { list-style: none; display: flex; flex-direction: column; gap: 20px; }
+    .benefits-list li {
+      display: flex; gap: 14px; align-items: flex-start;
+    }
+    .benefit-check {
+      flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+      background: #D1FAE5; color: #059669; display: flex;
+      align-items: center; justify-content: center; font-size: 14px; font-weight: 700;
+      margin-top: 2px;
+    }
+    .benefit-text h4 { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 2px; }
+    .benefit-text p { font-size: 14px; color: var(--gray-500); }
+    .benefits-visual {
+      background: linear-gradient(135deg, var(--primary), #7C3AED);
+      border-radius: var(--radius); padding: 48px 32px;
+      color: var(--white); text-align: center;
+    }
+    .benefits-visual h3 { font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+    .benefits-visual p { font-size: 15px; opacity: 0.85; margin-bottom: 32px; }
+    .benefit-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .benefit-metric {
+      background: rgba(255,255,255,0.15); border-radius: 10px; padding: 20px;
+    }
+    .benefit-metric .num { font-size: 32px; font-weight: 800; }
+    .benefit-metric .label { font-size: 12px; opacity: 0.8; margin-top: 4px; }
+
+    /* --- PRICING --- */
+    .pricing-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+    .pricing-card {
+      background: var(--white); border: 2px solid var(--gray-100);
+      border-radius: var(--radius); padding: 36px; position: relative;
+      transition: all 0.25s;
+    }
+    .pricing-card.popular {
+      border-color: var(--primary);
+      box-shadow: 0 8px 30px rgba(37,99,235,0.12);
+    }
+    .pricing-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--primary); color: var(--white);
+      padding: 4px 16px; border-radius: 12px; font-size: 12px; font-weight: 700;
+    }
+    .pricing-card h3 { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+    .pricing-card .price {
+      font-size: 36px; font-weight: 800; color: var(--dark); margin: 16px 0;
+    }
+    .pricing-card .price span { font-size: 15px; font-weight: 500; color: var(--gray-500); }
+    .pricing-card .price-note { font-size: 13px; color: var(--gray-500); margin-bottom: 24px; }
+    .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .pricing-features li {
+      font-size: 14px; color: var(--gray-700); display: flex; align-items: center; gap: 8px;
+    }
+    .pricing-features li::before { content: "\2713"; color: var(--primary); font-weight: 700; }
+    .pricing-card .btn { width: 100%; justify-content: center; }
+
+    /* --- CONTACT --- */
+    #contacto { background: var(--dark); color: var(--white); }
+    #contacto .section-header h2 { color: var(--white); }
+    #contacto .section-header p { color: var(--gray-500); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+    .contact-info { display: flex; flex-direction: column; gap: 28px; }
+    .contact-item { display: flex; gap: 14px; align-items: flex-start; }
+    .contact-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: rgba(37,99,235,0.15); color: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .contact-item h4 { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 2px; }
+    .contact-item p { font-size: 14px; color: var(--gray-500); }
+    .contact-item a { color: var(--primary-light); text-decoration: none; }
+    .contact-item a:hover { text-decoration: underline; }
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%; padding: 14px 16px; border-radius: 10px;
+      border: 1px solid var(--gray-700); background: var(--gray-900);
+      color: var(--white); font-size: 14px; font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder { color: var(--gray-500); }
+    .contact-form input:focus,
+    .contact-form textarea:focus { outline: none; border-color: var(--primary); }
+    .contact-form textarea { resize: vertical; min-height: 120px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* --- FOOTER --- */
+    footer {
+      background: var(--dark); border-top: 1px solid var(--gray-700);
+      padding: 32px 24px; text-align: center;
+    }
+    footer p { font-size: 13px; color: var(--gray-500); }
+
+    /* --- MOBILE --- */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column; gap: 0;
+        position: absolute; top: 64px; left: 0; right: 0;
+        background: var(--white); border-bottom: 1px solid var(--gray-100);
+        padding: 16px 24px;
+      }
+      .nav-links.open a { padding: 10px 0; display: block; }
+      .menu-toggle { display: block; }
+      .hero-stats { gap: 24px; flex-wrap: wrap; }
+      .benefits-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="logo">cellen<span>.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#funcionalidades">Funcionalidades</a></li>
+      <li><a href="#como-funciona">Como Funciona</a></li>
+      <li><a href="#beneficios">Benef&#237;cios</a></li>
+      <li><a href="#precos">Pre&#231;os</a></li>
+      <li><a href="#contacto" class="nav-cta">Contacte-nos</a></li>
+    </ul>
+    <button class="menu-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">&#127470;&#127476; Feito para escolas em Angola</div>
+    <h1>Gest&#227;o escolar <em>simples e completa</em> para a sua institui&#231;&#227;o</h1>
+    <p>Matr&#237;culas, pagamentos, comunica&#231;&#227;o com pais, relat&#243;rios e muito mais &#8212; tudo numa s&#243; plataforma.</p>
+    <div class="hero-buttons">
+      <a href="#contacto" class="btn btn-primary">
+        Solicitar Demonstra&#231;&#227;o
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#funcionalidades" class="btn btn-outline">Ver Funcionalidades</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">12+</div>
+        <div class="stat-label">M&#243;dulos integrados</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Perfis de utilizador</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Adaptado a Angola</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="funcionalidades">
+  <div class="container">
+    <div class="section-header">
+      <h2>Tudo o que a sua escola precisa</h2>
+      <p>Uma plataforma completa para gerir todos os aspectos do dia-a-dia escolar.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon fi-blue">&#128218;</div>
+        <h3>Matr&#237;culas e Inscri&#231;&#245;es</h3>
+        <p>Processo de matr&#237;cula digital com gest&#227;o de documentos, turmas e dados dos alunos num s&#243; lugar.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-amber">&#128176;</div>
+        <h3>Gest&#227;o Financeira</h3>
+        <p>Controlo de mensalidades, gera&#231;&#227;o de facturas, registo de pagamentos e relat&#243;rios financeiros completos.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-green">&#128172;</div>
+        <h3>Comunica&#231;&#227;o com Pais</h3>
+        <p>Mensagens directas, an&#250;ncios, caderneta digital e notifica&#231;&#245;es autom&#225;ticas para encarregados de educa&#231;&#227;o.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-purple">&#128203;</div>
+        <h3>Assiduidade e Presen&#231;as</h3>
+        <p>Registo di&#225;rio de presen&#231;as com notifica&#231;&#227;o autom&#225;tica aos pais em caso de falta.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-pink">&#127973;</div>
+        <h3>Sa&#250;de e Seguran&#231;a</h3>
+        <p>Registo de alergias, vacinas, incidentes e autoriza&#231;&#245;es de sa&#237;da &#8212; tudo documentado e acess&#237;vel.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-teal">&#128202;</div>
+        <h3>Relat&#243;rios e Painel</h3>
+        <p>Dashboard em tempo real com KPIs, estat&#237;sticas de cobran&#231;a, assiduidade e evolu&#231;&#227;o dos alunos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="como-funciona">
+  <div class="container">
+    <div class="section-header">
+      <h2>Como funciona</h2>
+      <p>Comece a usar o Cellen em poucos passos.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h3>Registe a sua escola</h3>
+        <p>Preencha os dados da institui&#231;&#227;o e receba acesso imediato &#224; plataforma.</p>
+      </div>
+      <div class="step">
+        <h3>Configure turmas e alunos</h3>
+        <p>Importe ou crie turmas, inscreva alunos e convide educadores e pais.</p>
+      </div>
+      <div class="step">
+        <h3>Comece a gerir</h3>
+        <p>Utilize todos os m&#243;dulos: presen&#231;as, pagamentos, comunica&#231;&#227;o e muito mais.</p>
+      </div>
+      <div class="step">
+        <h3>Acompanhe resultados</h3>
+        <p>Analise relat&#243;rios e tome decis&#245;es informadas para melhorar a sua escola.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section id="beneficios">
+  <div class="container">
+    <div class="section-header">
+      <h2>Porqu&#234; escolher o Cellen?</h2>
+      <p>Desenhado para a realidade das escolas angolanas.</p>
+    </div>
+    <div class="benefits-grid">
+      <ul class="benefits-list">
+        <li>
+          <div class="benefit-check">&#10003;</div>
+          <div class="benefit-text">
+            <h4>Multi-moeda (AOA, USD, EUR)</h4>
+            <p>Factura&#231;&#227;o na moeda que a sua escola utiliza, sem complica&#231;&#245;es.</p>
+          </div>
+        </li>
+        <li>
+          <div class="benefit-check">&#10003;</div>
+          <div class="benefit-text">
+            <h4>Aplica&#231;&#227;o m&#243;vel para pais</h4>
+            <p>Os encarregados acompanham tudo pelo telem&#243;vel &#8212; presen&#231;as, mensagens, pagamentos.</p>
+          </div>
+        </li>
+        <li>
+          <div class="benefit-check">&#10003;</div>
+          <div class="benefit-text">
+            <h4>Dados seguros e isolados</h4>
+            <p>Cada escola tem os seus dados completamente separados. Privacidade garantida.</p>
+          </div>
+        </li>
+        <li>
+          <div class="benefit-check">&#10003;</div>
+          <div class="benefit-text">
+            <h4>Sem instala&#231;&#227;o de software</h4>
+            <p>Funciona no navegador e no telem&#243;vel. Sem necessidade de servidores locais.</p>
+          </div>
+        </li>
+        <li>
+          <div class="benefit-check">&#10003;</div>
+          <div class="benefit-text">
+            <h4>Suporte em portugu&#234;s</h4>
+            <p>Equipa de suporte que fala a sua l&#237;ngua e entende o seu contexto.</p>
+          </div>
+        </li>
+      </ul>
+      <div class="benefits-visual">
+        <h3>Resultados que importam</h3>
+        <p>Escolas que digitalizam a gest&#227;o ganham efici&#234;ncia imediata.</p>
+        <div class="benefit-metrics">
+          <div class="benefit-metric">
+            <div class="num">80%</div>
+            <div class="label">Menos tempo administrativo</div>
+          </div>
+          <div class="benefit-metric">
+            <div class="num">95%</div>
+            <div class="label">Taxa de cobran&#231;a</div>
+          </div>
+          <div class="benefit-metric">
+            <div class="num">3x</div>
+            <div class="label">Mais envolvimento dos pais</div>
+          </div>
+          <div class="benefit-metric">
+            <div class="num">0</div>
+            <div class="label">Pap&#233;is perdidos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="precos">
+  <div class="container">
+    <div class="section-header">
+      <h2>Planos simples e transparentes</h2>
+      <p>Escolha o plano ideal para o tamanho da sua escola.</p>
+    </div>
+    <div class="pricing-cards">
+      <div class="pricing-card">
+        <h3>Essencial</h3>
+        <p style="font-size:13px;color:var(--gray-500);">Para escolas pequenas</p>
+        <div class="price">25.000 <span>AOA/m&#234;s</span></div>
+        <p class="price-note">At&#233; 50 alunos</p>
+        <ul class="pricing-features">
+          <li>Matr&#237;culas e turmas</li>
+          <li>Registo de presen&#231;as</li>
+          <li>Mensagens aos pais</li>
+          <li>Gest&#227;o financeira b&#225;sica</li>
+          <li>Suporte por email</li>
+        </ul>
+        <a href="#contacto" class="btn btn-outline">Come&#231;ar</a>
+      </div>
+      <div class="pricing-card popular">
+        <div class="pricing-badge">Mais popular</div>
+        <h3>Profissional</h3>
+        <p style="font-size:13px;color:var(--gray-500);">Para escolas em crescimento</p>
+        <div class="price">50.000 <span>AOA/m&#234;s</span></div>
+        <p class="price-note">At&#233; 200 alunos</p>
+        <ul class="pricing-features">
+          <li>Tudo do plano Essencial</li>
+          <li>Relat&#243;rios avan&#231;ados</li>
+          <li>Caderneta digital completa</li>
+          <li>Gest&#227;o de sa&#250;de</li>
+          <li>App m&#243;vel para pais</li>
+          <li>Suporte priorit&#225;rio</li>
+        </ul>
+        <a href="#contacto" class="btn btn-primary">Escolher</a>
+      </div>
+      <div class="pricing-card">
+        <h3>Institucional</h3>
+        <p style="font-size:13px;color:var(--gray-500);">Para grandes institui&#231;&#245;es</p>
+        <div class="price">Sob consulta</div>
+        <p class="price-note">Alunos ilimitados</p>
+        <ul class="pricing-features">
+          <li>Tudo do plano Profissional</li>
+          <li>M&#250;ltiplos campus</li>
+          <li>Website da escola incluido</li>
+          <li>Integra&#231;&#245;es personalizadas</li>
+          <li>Gestor de conta dedicado</li>
+          <li>Forma&#231;&#227;o presencial</li>
+        </ul>
+        <a href="#contacto" class="btn btn-outline">Falar connosco</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contacto">
+  <div class="container">
+    <div class="section-header">
+      <h2>Fale connosco</h2>
+      <p>Tem d&#250;vidas ou quer uma demonstra&#231;&#227;o? Estamos &#224; disposi&#231;&#227;o.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-icon">&#128231;</div>
+          <div>
+            <h4>Email</h4>
+            <p><a href="mailto:info@cellen.ao">info@cellen.ao</a></p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">&#128222;</div>
+          <div>
+            <h4>Telefone / WhatsApp</h4>
+            <p><a href="tel:+244923000000">+244 923 000 000</a></p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">&#128205;</div>
+          <div>
+            <h4>Localiza&#231;&#227;o</h4>
+            <p>Luanda, Angola</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">&#128338;</div>
+          <div>
+            <h4>Hor&#225;rio de Atendimento</h4>
+            <p>Segunda a Sexta, 8h &#8212; 17h</p>
+          </div>
+        </div>
+      </div>
+      <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <input type="text" name="name" placeholder="O seu nome" required>
+          <input type="text" name="school" placeholder="Nome da escola">
+        </div>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="tel" name="phone" placeholder="Telefone / WhatsApp">
+        <textarea name="message" placeholder="A sua mensagem..." required></textarea>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Enviar Mensagem</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <p>&copy; 2026 Cellen. Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<script>
+  // Navbar shadow on scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // Simple form handler
+  function handleSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = new FormData(form);
+    const name = data.get('name');
+    alert('Obrigado ' + name + '! Entraremos em contacto em breve.');
+    form.reset();
+  }
+
+  // Close mobile menu on link click
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.getElementById('navLinks').classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>
