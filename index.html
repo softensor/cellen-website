@@ -3,6 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QVG02B69ML"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-QVG02B69ML');
+  </script>
+
   <title>Cellen — Gest&#227;o Escolar Inteligente</title>
   <meta name="description" content="Cellen: plataforma de gest&#227;o para creches, jardins de inf&#226;ncia e ber&#231;&#225;rios em Angola. Matr&#237;culas, pagamentos, comunica&#231;&#227;o com pais e muito mais.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -689,6 +700,12 @@
       }
 
       alert(result.message || `Obrigado ${name}! Entraremos em contacto em breve.`);
+
+      gtag('event', 'generate_lead', {
+        event_category: 'Attempt-Contact',
+        event_label: 'Demo Request'
+      });
+
       form.reset();
     } catch (error) {
       alert(error.message || 'Não foi possível enviar a mensagem. Tente novamente mais tarde.');
