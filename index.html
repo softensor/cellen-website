@@ -660,23 +660,42 @@
     document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
   });
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const form = e.target;
     const data = new FormData(form);
     const name = data.get('name');
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalSubmitText = submitButton.textContent;
 
-    // If API is configured, send to backend
-    if (API_BASE) {
-      fetch(`${API_BASE}/api/v1/website/public/contact`, {
+    if (!API_BASE) {
+      alert('Não foi possível enviar a mensagem neste momento. Tente novamente mais tarde.');
+      return;
+    }
+
+    submitButton.disabled = true;
+    submitButton.textContent = 'A enviar...';
+
+    try {
+      const response = await fetch(`${API_BASE}/api/v1/website/public/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(Object.fromEntries(data)),
-      }).catch(() => {});
-    }
+      });
+      const result = await response.json().catch(() => ({}));
 
-    alert('Obrigado ' + name + '! Entraremos em contacto em breve.');
-    form.reset();
+      if (!response.ok) {
+        throw new Error(result.detail || 'Não foi possível enviar a mensagem.');
+      }
+
+      alert(result.message || `Obrigado ${name}! Entraremos em contacto em breve.`);
+      form.reset();
+    } catch (error) {
+      alert(error.message || 'Não foi possível enviar a mensagem. Tente novamente mais tarde.');
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = originalSubmitText;
+    }
   }
 
   document.querySelectorAll('.nav-links a').forEach(a => {
