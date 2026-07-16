@@ -5,20 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-669837714"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QVG02B69ML"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    // Google Analytics 4
     gtag('config', 'G-QVG02B69ML');
-
-    // Google Ads
-    gtag('config', 'AW-669837714');
-
-    // Page view conversion (fires once per page load)
-    gtag('event', 'conversion', {'send_to': 'AW-669837714/L9EBCJ_v-8EBEJLTs78C'});
   </script>
 
   <title>Cellen — Gest&#227;o Escolar Inteligente</title>
@@ -708,18 +701,10 @@
 
       alert(result.message || `Obrigado ${name}! Entraremos em contacto em breve.`);
 
-      // GA4 custom event
       gtag('event', 'generate_lead', {
         event_category: 'Attempt-Contact',
         event_label: 'Demo Request'
       });
-
-      // Google Ads conversion — lead form submission
-      // Uses one of the conversion labels Google Ads provided.
-      // If you want a dedicated "form submit" conversion action
-      // (separate from the page-view one loaded in <head>),
-      // create it in Google Ads and swap the label below.
-      gtag('event', 'conversion', {'send_to': 'AW-669837714/Non9CNCR97ECEJLTs78C'});
 
       form.reset();
     } catch (error) {
